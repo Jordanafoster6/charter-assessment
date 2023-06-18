@@ -35,9 +35,9 @@ function App() {
         </AppBar>
       </Box>
 
-      <div style={{ padding: "15px" }}>
-        <div style={{ display: "flex", paddingBottom: "30px" }}>
-          <div style={{ width: "50%", textAlign: "left" }}>
+      <div className="container">
+        <div className="row mt-2">
+          <div className="col-12 col-md-6 text-center text-md-start">
             <Typography variant="h3" color="inherit" component="div">
               Welcome Charles!
             </Typography>
@@ -47,8 +47,13 @@ function App() {
               between $50 and $100 in each transaction.
             </Typography>
           </div>
-          <div style={{ width: "50%" }}>
-            <Typography variant="h6" color="inherit" component="div">
+          <div className="col-12 col-md-6 text-center">
+            <Typography
+              className="mt-3"
+              variant="h6"
+              color="inherit"
+              component="div"
+            >
               Total Points:
             </Typography>
             <Typography variant="h4" color="inherit" component="div">
@@ -56,72 +61,73 @@ function App() {
             </Typography>
           </div>
         </div>
-
-        <div>
-          <Typography
-            variant="h5"
-            color="inherit"
-            component="div"
-            style={{ textAlign: "left" }}
-          >
-            Your Transactions
-          </Typography>
-          {isLoading ? (
+        <div className="row mt-4">
+          <div className="col-12">
             <Typography
-              variant="h2"
+              variant="h5"
               color="inherit"
               component="div"
               style={{ textAlign: "left" }}
             >
-              Loading...
+              Your Transactions
             </Typography>
-          ) : (
-            <>
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Description</TableCell>
-                      <TableCell align="right">Price</TableCell>
-                      <TableCell align="right">Points</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data ? (
-                      data.map(transaction => (
-                        <TableRow
-                          key={transaction.desc}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 }
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {transaction.desc}
-                          </TableCell>
-                          <TableCell align="right">
-                            {USDollar.format(transaction.price)}
-                          </TableCell>
-                          <TableCell align="right">
-                            {getPointsFromTransactions([transaction])} pts
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
+            {isLoading ? (
+              <Typography
+                variant="h2"
+                color="inherit"
+                component="div"
+                style={{ textAlign: "left" }}
+              >
+                Loading...
+              </Typography>
+            ) : (
+              <>
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
                       <TableRow>
-                        <Typography
-                          variant="h4"
-                          color="inherit"
-                          component="div"
-                        >
-                          No Transactions
-                        </Typography>
+                        <TableCell>Description</TableCell>
+                        <TableCell align="right">Price</TableCell>
+                        <TableCell align="right">Points</TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </>
-          )}
+                    </TableHead>
+                    <TableBody>
+                      {data ? (
+                        data.map(transaction => (
+                          <TableRow
+                            key={transaction.desc}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 }
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {transaction.desc}
+                            </TableCell>
+                            <TableCell align="right">
+                              {USDollar.format(transaction.price)}
+                            </TableCell>
+                            <TableCell align="right">
+                              {getPointsFromTransactions([transaction])} pts
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <Typography
+                            variant="h4"
+                            color="inherit"
+                            component="div"
+                          >
+                            No Transactions
+                          </Typography>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
