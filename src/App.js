@@ -71,6 +71,7 @@ function App() {
             >
               Your Transactions
             </Typography>
+            {/* Loading UI */}
             {isLoading ? (
               <Typography
                 variant="h2"
@@ -93,6 +94,7 @@ function App() {
                     </TableHead>
                     <TableBody>
                       {data ? (
+                        // transactions loaded UI
                         data.map(transaction => (
                           <TableRow
                             key={transaction.desc}
@@ -112,6 +114,7 @@ function App() {
                           </TableRow>
                         ))
                       ) : (
+                        // no transactions UI
                         <TableRow>
                           <Typography
                             variant="h4"
