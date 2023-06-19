@@ -1,11 +1,10 @@
 import React from "react";
-import "./App.css";
 // data & helper functions
 import {
-  transactions,
   useGetTransactions,
   getPointsFromTransactions,
-  USDollar
+  USDollar,
+  useGetUniqueCustomers
 } from "./helpers";
 import dayjs from "dayjs";
 // header
@@ -26,15 +25,17 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
 function App() {
+  const customers = useGetUniqueCustomers();
+  const [customer, setCustomer] = React.useState(undefined);
   const [month, setMonth] = React.useState(undefined);
-  const { data, isLoading } = useGetTransactions(month);
+  const { data, isLoading } = useGetTransactions(month, customer);
   return (
     <div className="App">
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar variant="dense">
             <Typography variant="h6" color="inherit" component="div">
-              Bert's Electronics Rewards
+              Bert's Electronics - Rewards
             </Typography>
           </Toolbar>
         </AppBar>
@@ -43,14 +44,35 @@ function App() {
       <div className="container">
         <div className="row mt-2">
           <div className="col-12 col-md-6 text-center text-md-start">
-            <Typography variant="h3" color="inherit" component="div">
-              Welcome Charles!
+            <Typography
+              className="mb-3"
+              variant="h4"
+              color="inherit"
+              component="div"
+            >
+              Customers
             </Typography>
-            <Typography variant="body1" color="inherit" component="div">
-              As a customer you receive 2 points for every dollar spent over
-              $100 in each transaction, plus 1 point for every dollar spent
-              between $50 and $100 in each transaction.
-            </Typography>
+            <div>
+              <Button
+                variant="contained"
+                onClick={() => setCustomer(undefined)}
+              >
+                All Transactions
+              </Button>
+              &nbsp;&nbsp;
+              {customers.data ? (
+                customers.data.map(c => (
+                  <>
+                    <Button variant="contained" onClick={() => setCustomer(c)}>
+                      {c}
+                    </Button>
+                    &nbsp;&nbsp;
+                  </>
+                ))
+              ) : (
+                <>no customers</>
+              )}
+            </div>
           </div>
           <div className="col-12 col-md-6 text-center">
             <ButtonGroup
@@ -83,7 +105,7 @@ function App() {
               component="div"
               style={{ textAlign: "left" }}
             >
-              Your Transactions
+              Customer Transactions
             </Typography>
             {/* Loading UI */}
             {isLoading ? (
@@ -101,6 +123,7 @@ function App() {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
+                        <TableCell>Customer</TableCell>
                         <TableCell>Description</TableCell>
                         <TableCell align="right">Price</TableCell>
                         <TableCell align="right">Points</TableCell>
@@ -117,6 +140,11 @@ function App() {
                               "&:last-child td, &:last-child th": { border: 0 }
                             }}
                           >
+                            <TableCell component="th" scope="row">
+                              {/* capitalize first letter of name */}
+                              {transaction.customer.charAt(0).toUpperCase() +
+                                transaction.customer.slice(1)}
+                            </TableCell>
                             <TableCell component="th" scope="row">
                               {transaction.desc}
                             </TableCell>
