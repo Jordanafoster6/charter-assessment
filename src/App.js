@@ -7,6 +7,7 @@ import {
   getPointsFromTransactions,
   USDollar
 } from "./helpers";
+import dayjs from "dayjs";
 // header
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -20,9 +21,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+// button group
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 function App() {
-  const { data, isLoading } = useGetTransactions();
+  const [month, setMonth] = React.useState(undefined);
+  const { data, isLoading } = useGetTransactions(month);
   return (
     <div className="App">
       <Box sx={{ flexGrow: 1 }}>
@@ -48,6 +53,15 @@ function App() {
             </Typography>
           </div>
           <div className="col-12 col-md-6 text-center">
+            <ButtonGroup
+              variant="contained"
+              aria-label="outlined primary button group"
+            >
+              <Button onClick={() => setMonth(undefined)}>All</Button>
+              <Button onClick={() => setMonth(0)}>Jan</Button>
+              <Button onClick={() => setMonth(1)}>Feb</Button>
+              <Button onClick={() => setMonth(2)}>March</Button>
+            </ButtonGroup>
             <Typography
               className="mt-3"
               variant="h6"
@@ -57,7 +71,7 @@ function App() {
               Total Points:
             </Typography>
             <Typography variant="h4" color="inherit" component="div">
-              {getPointsFromTransactions(transactions)}
+              {getPointsFromTransactions(data)}
             </Typography>
           </div>
         </div>
@@ -90,6 +104,7 @@ function App() {
                         <TableCell>Description</TableCell>
                         <TableCell align="right">Price</TableCell>
                         <TableCell align="right">Points</TableCell>
+                        <TableCell align="right">Date</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -110,6 +125,9 @@ function App() {
                             </TableCell>
                             <TableCell align="right">
                               {getPointsFromTransactions([transaction])} pts
+                            </TableCell>
+                            <TableCell align="right">
+                              {dayjs(transaction.date).format("MM/DD/YYYY")}
                             </TableCell>
                           </TableRow>
                         ))
